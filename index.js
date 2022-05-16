@@ -30,11 +30,11 @@ console.log('example task:', processFirstItem(['foo','bar'],function(str){return
   Study the code for counter1 and counter2, then answer the questions below.
   
   1. What is the difference between counter1 and counter2?
-  
+  "Counter1 uses lexical scoping where function counter() is used to increment the variable 'count' within the outer function, counterMaker()." Counter2 increments variable 'count' as well but 'count' is defined in the global scope in this scenario.
   2. Which of the two uses a closure? How can you tell?
-  
+  "Counter1 because there is a function defined within the outer function counterMaker()."
   3. In what scenario would the counter1 code be preferable? In what scenario would 
-     counter2 be better?  
+     counter2 be better? "Counter1 would be better if you only want the count to be impacted by functional scope. Counter2 could be used with separate functions to impact count."
 */
 
 // counter1 code
@@ -64,9 +64,11 @@ Use the inning function below to do the following:
 NOTE: This will be a callback function for the tasks below
 */
 
-function inning(/*Code Here*/){
-    /*Code Here*/
+function inning(){
+    return Math.round(Math.random() * 2)
 }
+
+console.log(inning());
 
 
 /* ⚾️⚾️⚾️ Task 3: finalScore() ⚾️⚾️⚾️
@@ -83,8 +85,11 @@ Use the finalScore function below to do the following:
 }
 */ 
 
-function finalScore(/*Code Here*/){
-  /*Code Here*/
+function finalScore(fun, inn){
+  const totalScore = {};
+  totalScore.Home = inn * fun();
+  totalScore.Away = inn * fun();
+  return totalScore;
 }
 
 
@@ -101,10 +106,13 @@ For example: invoking getInningScore(inning) might return this object:
   */
 
 
-function getInningScore(/*Your Code Here */) {
-  /*Your Code Here */
-
+function getInningScore(fun) {
+  const score = {}
+  score.Home = fun();
+  score.Away = fun();
+  return score;
 }
+console.log(getInningScore(inning));
 
 
 /* STRETCH: ⚾️⚾️⚾️ Task 5: scoreboard() ⚾️⚾️⚾️
@@ -147,9 +155,27 @@ Use the scoreboard function below to do the following:
   "This game will require extra innings: Away 10 - Home 10"
 ] */
 // NOTE: There is no test associated with this code; if your output matches the given example, consider it complete!
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
+function scoreboard(fun1, fun2, inn) {
+  let array = [];
+  let awayTotal = 0;
+  let homeTotal = 0;
+  for(let i = 1; i < inn + 1; i++){
+    let awayCount = fun1(fun2).Away;
+    let homeCount = fun1(fun2).Home;
+    array.push(`Inning ${i}: Away ${awayCount} - Home ${homeCount}`);
+    awayTotal += awayCount;
+    homeTotal += homeCount;
+  }
+  if(awayTotal === homeTotal){
+    array.push(`This game will require extra innings: Away ${awayTotal} - Home ${homeTotal}`)
+  }
+  else{
+    array.push(`Final Score: Away ${awayTotal} - Home ${homeTotal}`)
+  }
+  return array;
 }
+
+console.log(scoreboard(getInningScore, inning, 9))
 
 
 
